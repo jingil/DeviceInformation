@@ -8,6 +8,7 @@ import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -24,7 +25,8 @@ public class DisplayFragment extends Fragment {
 
     private DisplayInfo displayInfo;
     private TextView screen_size_txt, screen_width_txt, screen_height_txt, screen_resolution_txt, dpi_width_txt, dpi_height_txt, dpi_density_txt, navigationbar_height_txt, statusbar_height_txt, soft_buttonbar_height_txt, screen_minimum_brightness_txt, screen_maximum_brightness_txt;
-    SeekBar screen_maximum_brightness_seekbar;
+    private SeekBar screen_brightness_seekbar;
+    Button screen_max_brightness_app_btn, screen_min_brightness_app_btn;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -59,7 +61,12 @@ public class DisplayFragment extends Fragment {
         screen_minimum_brightness_txt = (TextView) root.findViewById(R.id.screen_minimum_brightness_txt);
         screen_maximum_brightness_txt = (TextView) root.findViewById(R.id.screen_maximum_brightness_txt);
 
-        screen_maximum_brightness_seekbar = (SeekBar) root.findViewById(R.id.screen_maximum_brightness_seekbar);
+        screen_brightness_seekbar = (SeekBar) root.findViewById(R.id.screen_brightness_seekbar);
+
+        screen_max_brightness_app_btn = (Button) root.findViewById(R.id.screen_max_brightness_app_btn);
+        screen_min_brightness_app_btn = (Button) root.findViewById(R.id.screen_min_brightness_app_btn);
+
+
     }
 
     private void setDisplayDetails() {
@@ -76,15 +83,15 @@ public class DisplayFragment extends Fragment {
         screen_minimum_brightness_txt.setText(String.valueOf(displayInfo.getMinimumScreenBrightnessSetting()));
         screen_maximum_brightness_txt.setText(String.valueOf(displayInfo.getMaximumScreenBrightnessSetting()));
 
-        screen_maximum_brightness_seekbar.setMin(displayInfo.getMinimumScreenBrightnessSetting());
-        screen_maximum_brightness_seekbar.setMax(displayInfo.getMaximumScreenBrightnessSetting());
+        screen_brightness_seekbar.setMin(displayInfo.getMinimumScreenBrightnessSetting());
+        screen_brightness_seekbar.setMax(displayInfo.getMaximumScreenBrightnessSetting());
 
-        screen_maximum_brightness_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        screen_brightness_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 if (checkSystemWritePermission())
-                    displayInfo.setBrightness(progress);
+                    displayInfo.setBrightnessSystem(progress);
             }
 
             @Override
@@ -95,6 +102,19 @@ public class DisplayFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
+            }
+        });
+
+        screen_min_brightness_app_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayInfo.setMinBrightnessForActivity();
+            }
+        });
+        screen_max_brightness_app_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayInfo.setMaxBrightnessForActivity();
             }
         });
     }

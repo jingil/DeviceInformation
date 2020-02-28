@@ -7,6 +7,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.Window;
+import android.view.WindowManager;
 
 public class DisplayInfo {
 
@@ -121,9 +122,27 @@ public class DisplayInfo {
         return 255;
     }
 
-    public void setBrightness(int value) {
+    public void setBrightnessSystem(int value) {
 
         Settings.System.putInt(activity.getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS, value);
+
+    }
+
+    public void setMaxBrightnessForActivity() {
+
+        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        WindowManager.LayoutParams params = activity.getWindow().getAttributes();
+        params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
+        activity.getWindow().setAttributes(params);
+
+    }
+
+    public void setMinBrightnessForActivity() {
+
+        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        WindowManager.LayoutParams params = activity.getWindow().getAttributes();
+        params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF;
+        activity.getWindow().setAttributes(params);
 
     }
 

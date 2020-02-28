@@ -1,10 +1,8 @@
 package support.fuchsia.deviceinfo;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
-import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
@@ -124,9 +122,9 @@ public class DisplayInfo {
     }
 
     public void setBrightness(int value) {
-        if (checkSystemWritePermission()) {
-            Settings.System.putInt(activity.getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS, value);
-        }
+
+        Settings.System.putInt(activity.getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS, value);
+
     }
 
     private String densityDpiToString(int densityDpi) {
@@ -173,22 +171,4 @@ public class DisplayInfo {
     }
 
 
-    private boolean checkSystemWritePermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (Settings.System.canWrite(activity))
-
-                return true;
-            else
-                openAndroidPermissionsMenu();
-        }
-        return false;
-    }
-
-    private void openAndroidPermissionsMenu() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
-            intent.setData(Uri.parse("package:" + activity.getPackageName()));
-            activity.startActivity(intent);
-        }
-    }
 }

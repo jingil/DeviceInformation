@@ -1,6 +1,10 @@
 package support.fuchsia.deviceinformation.ui.display;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +59,7 @@ public class DisplayFragment extends Fragment {
         screen_minimum_brightness_txt = (TextView) root.findViewById(R.id.screen_minimum_brightness_txt);
         screen_maximum_brightness_txt = (TextView) root.findViewById(R.id.screen_maximum_brightness_txt);
 
-        screen_maximum_brightness_seekbar= (SeekBar) root.findViewById(R.id.screen_maximum_brightness_seekbar);
+        screen_maximum_brightness_seekbar = (SeekBar) root.findViewById(R.id.screen_maximum_brightness_seekbar);
     }
 
     private void setDisplayDetails() {
@@ -78,7 +82,9 @@ public class DisplayFragment extends Fragment {
         screen_maximum_brightness_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                displayInfo.setBrightness(progress);
+
+                if (checkSystemWritePermission())
+                    displayInfo.setBrightness(progress);
             }
 
             @Override
@@ -93,6 +99,24 @@ public class DisplayFragment extends Fragment {
         });
     }
 
+    private boolean checkSystemWritePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Settings.System.canWrite(getActivity()))
+
+                return true;
+            else
+                openAndroidPermissionsMenu();
+        }
+        return false;
+    }
+
+    private void openAndroidPermissionsMenu() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+            intent.setData(Uri.parse("package:" + getActivity()));
+            startActivity(intent);
+        }
+    }
 
     private static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();

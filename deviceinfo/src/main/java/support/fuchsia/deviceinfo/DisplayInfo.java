@@ -1,11 +1,14 @@
 package support.fuchsia.deviceinfo;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -60,6 +63,62 @@ public class DisplayInfo {
         return dm.densityDpi;
     }
 
+    public final String getDensity() {
+
+        String densityStr = "";
+        final int density = activity.getResources().getDisplayMetrics().densityDpi;
+        switch (density) {
+            case DisplayMetrics.DENSITY_LOW:
+                densityStr = "LDPI";
+                break;
+            case DisplayMetrics.DENSITY_MEDIUM:
+                densityStr = "MDPI";
+                break;
+            case DisplayMetrics.DENSITY_TV:
+                densityStr = "TVDPI";
+                break;
+            case DisplayMetrics.DENSITY_HIGH:
+                densityStr = "HDPI";
+                break;
+            case DisplayMetrics.DENSITY_XHIGH:
+                densityStr = "XHDPI";
+                break;
+            case DisplayMetrics.DENSITY_400:
+                densityStr = "XMHDPI";
+                break;
+            case DisplayMetrics.DENSITY_XXHIGH:
+                densityStr = "XXHDPI";
+                break;
+            case DisplayMetrics.DENSITY_XXXHIGH:
+                densityStr = "XXXHDPI";
+                break;
+            default:
+                break;
+        }
+        return densityStr;
+    }
+
+    public final float getRefreshRate() {
+        WindowManager wm = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
+        Display display = null;
+        if (wm != null) {
+            display = wm.getDefaultDisplay();
+        }
+        if (display != null) {
+            return display.getRefreshRate();
+        } else return 0;
+    }
+
+    public final int[] getDisplayXYCoordinates(final MotionEvent event) {
+        int[] coordinates = new int[2];
+        coordinates[0] = 0;
+        coordinates[1] = 0;
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            coordinates[0] = (int) event.getX();
+            coordinates[1] = (int) event.getY();
+        }
+        return coordinates;
+    }
 
     public int getNavigationBarHeight() {
         Resources resources = activity.getResources();
@@ -142,6 +201,15 @@ public class DisplayInfo {
         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         WindowManager.LayoutParams params = activity.getWindow().getAttributes();
         params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF;
+        activity.getWindow().setAttributes(params);
+
+    }
+
+    public void resetBrightnessForActivity() {
+
+        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        WindowManager.LayoutParams params = activity.getWindow().getAttributes();
+        params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
         activity.getWindow().setAttributes(params);
 
     }

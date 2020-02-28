@@ -24,9 +24,9 @@ import support.fuchsia.deviceinformation.R;
 public class DisplayFragment extends Fragment {
 
     private DisplayInfo displayInfo;
-    private TextView screen_size_txt, screen_width_txt, screen_height_txt, screen_resolution_txt, dpi_width_txt, dpi_height_txt, dpi_density_txt, navigationbar_height_txt, statusbar_height_txt, soft_buttonbar_height_txt, screen_minimum_brightness_txt, screen_maximum_brightness_txt;
+    private TextView screen_size_txt, screen_width_txt, screen_height_txt, screen_resolution_txt, dpi_width_txt, dpi_height_txt, dpi_density_txt, navigationbar_height_txt, statusbar_height_txt, soft_buttonbar_height_txt, screen_minimum_brightness_txt, screen_maximum_brightness_txt, screen_refresh_rate_txt;
     private SeekBar screen_brightness_seekbar;
-    Button screen_max_brightness_app_btn, screen_min_brightness_app_btn;
+    private Button screen_max_brightness_app_btn, screen_min_brightness_app_btn, screen_reset_brightness_app_btn;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -38,7 +38,6 @@ public class DisplayFragment extends Fragment {
 
         init(root);
         setDisplayDetails();
-
 
         displayInfo.getDpiDensity();
 
@@ -60,16 +59,18 @@ public class DisplayFragment extends Fragment {
         soft_buttonbar_height_txt = (TextView) root.findViewById(R.id.soft_buttonbar_height_txt);
         screen_minimum_brightness_txt = (TextView) root.findViewById(R.id.screen_minimum_brightness_txt);
         screen_maximum_brightness_txt = (TextView) root.findViewById(R.id.screen_maximum_brightness_txt);
+        screen_refresh_rate_txt = (TextView) root.findViewById(R.id.screen_refresh_rate_txt);
 
         screen_brightness_seekbar = (SeekBar) root.findViewById(R.id.screen_brightness_seekbar);
 
         screen_max_brightness_app_btn = (Button) root.findViewById(R.id.screen_max_brightness_app_btn);
         screen_min_brightness_app_btn = (Button) root.findViewById(R.id.screen_min_brightness_app_btn);
-
+        screen_reset_brightness_app_btn = (Button) root.findViewById(R.id.screen_reset_brightness_app_btn);
 
     }
 
     private void setDisplayDetails() {
+
         screen_size_txt.setText(String.valueOf(round(displayInfo.getScreenSize(), 1)));
         screen_width_txt.setText(String.valueOf(round(displayInfo.getScreenSizeWidth(), 1)));
         screen_height_txt.setText(String.valueOf(round(displayInfo.getScreenSizeHeight(), 1)));
@@ -82,7 +83,7 @@ public class DisplayFragment extends Fragment {
         soft_buttonbar_height_txt.setText(String.valueOf(displayInfo.getSoftButtonsBarHeight()));
         screen_minimum_brightness_txt.setText(String.valueOf(displayInfo.getMinimumScreenBrightnessSetting()));
         screen_maximum_brightness_txt.setText(String.valueOf(displayInfo.getMaximumScreenBrightnessSetting()));
-
+        screen_refresh_rate_txt.setText(String.valueOf(displayInfo.getRefreshRate()));
         screen_brightness_seekbar.setMin(displayInfo.getMinimumScreenBrightnessSetting());
         screen_brightness_seekbar.setMax(displayInfo.getMaximumScreenBrightnessSetting());
 
@@ -117,6 +118,14 @@ public class DisplayFragment extends Fragment {
                 displayInfo.setMaxBrightnessForActivity();
             }
         });
+        screen_reset_brightness_app_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayInfo.resetBrightnessForActivity();
+            }
+
+        });
+
     }
 
     private boolean checkSystemWritePermission() {

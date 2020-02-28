@@ -1,6 +1,7 @@
 package support.fuchsia.deviceinfo;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -12,6 +13,7 @@ import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -280,6 +282,36 @@ public class DisplayInfo {
             }, 4000);
         }
 
+    }
+
+    public void toggleFullscreen() {
+        WindowManager.LayoutParams attrs = activity.getWindow().getAttributes();
+        attrs.flags ^= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        activity.getWindow().setAttributes(attrs);
+    }
+
+    public void enterFullscreen() {
+        // Jellybean and up, new hotness
+        View decorView = activity.getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+       /* ActionBar actionBar = activity.();
+        actionBar.hide();*/
+    }
+
+    public void exitFullscreen() {
+        // Jellybean and up, new hotness
+        View decorView = activity.getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
+        decorView.setSystemUiVisibility(uiOptions);
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+        /* ActionBar actionBar = activity.getActionBar();
+        actionBar.show();*/
     }
 
 

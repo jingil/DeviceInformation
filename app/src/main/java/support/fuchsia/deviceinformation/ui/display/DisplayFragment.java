@@ -26,7 +26,7 @@ public class DisplayFragment extends Fragment {
     private DisplayInfo displayInfo;
     private TextView screen_size_txt, screen_width_txt, screen_height_txt, screen_resolution_txt, dpi_width_txt, dpi_height_txt, dpi_density_txt, navigationbar_height_txt, statusbar_height_txt, soft_buttonbar_height_txt, screen_minimum_brightness_txt, screen_maximum_brightness_txt, screen_refresh_rate_txt, orientation_txt;
     private SeekBar screen_brightness_seekbar;
-    private Button screen_max_brightness_app_btn, screen_min_brightness_app_btn, screen_reset_brightness_app_btn, orientation_portrait_btn, orientation_landscape_btn, change_orientation_btn;
+    private Button screen_max_brightness_app_btn, screen_min_brightness_app_btn, screen_reset_brightness_app_btn, orientation_portrait_btn, orientation_landscape_btn, change_orientation_btn, toggle_full_screen_btn, enter_full_screen_btn, exit_full_screen_btn;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -70,6 +70,9 @@ public class DisplayFragment extends Fragment {
         orientation_portrait_btn = (Button) root.findViewById(R.id.orientation_portrait_btn);
         orientation_landscape_btn = (Button) root.findViewById(R.id.orientation_landscape_btn);
         change_orientation_btn = (Button) root.findViewById(R.id.change_orientation_btn);
+        toggle_full_screen_btn = (Button) root.findViewById(R.id.toggle_full_screen_btn);
+        enter_full_screen_btn = (Button) root.findViewById(R.id.enter_full_screen_btn);
+        exit_full_screen_btn = (Button) root.findViewById(R.id.exit_full_screen_btn);
     }
 
     private void setDisplayDetails() {
@@ -149,6 +152,27 @@ public class DisplayFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 displayInfo.changeScreenOrientation();
+            }
+
+        });
+        toggle_full_screen_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayInfo.toggleFullscreen();
+            }
+
+        });
+        enter_full_screen_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayInfo.enterFullscreen();
+            }
+
+        });
+        exit_full_screen_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayInfo.exitFullscreen();
             }
 
         });

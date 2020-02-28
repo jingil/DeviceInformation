@@ -1,10 +1,13 @@
 package support.fuchsia.deviceinfo;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -12,9 +15,14 @@ import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
+import static android.content.Context.WINDOW_SERVICE;
+
 public class DisplayInfo {
 
-    Activity activity;
+    private Activity activity;
+
+    public static final int ORIENTATION_LANDSCAPE = 0;
+    public static final int ORIENTATION_PORTRAIT = 1;
 
     public DisplayInfo(Activity activity) {
         this.activity = activity;
@@ -98,8 +106,9 @@ public class DisplayInfo {
         return densityStr;
     }
 
+
     public final float getRefreshRate() {
-        WindowManager wm = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) activity.getSystemService(WINDOW_SERVICE);
         Display display = null;
         if (wm != null) {
             display = wm.getDefaultDisplay();
@@ -213,6 +222,66 @@ public class DisplayInfo {
         activity.getWindow().setAttributes(params);
 
     }
+
+    public String getOrientation() {
+
+        final int orientation = activity.getResources().getConfiguration().orientation;
+        switch (orientation) {
+
+            case 2:
+                return "ORIENTATION_LANDSCAPE";
+
+            case 1:
+                return "ORIENTATION_PORTRAIT";
+
+            case 0:
+                return "ORIENTATION_SQUARE";
+            default:
+                return "ERROR";
+
+        }
+
+
+    }
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    public void setOrientation(int orientation) {
+
+        switch (orientation) {
+            case ORIENTATION_LANDSCAPE:
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                break;
+            case ORIENTATION_PORTRAIT:
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    public void changeScreenOrientation() {
+        int orientation = activity.getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        } else {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        }
+        if (Settings.System.getInt(activity.getContentResolver(),
+                Settings.System.ACCELEROMETER_ROTATION, 0) == 1) {
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                }
+            }, 4000);
+        }
+
+    }
+
 
     private String densityDpiToString(int densityDpi) {
         String str;

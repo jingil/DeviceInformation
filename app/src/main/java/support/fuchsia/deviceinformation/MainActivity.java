@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 
+import support.fuchsia.deviceinformation.ui.cpu.CPUFragment;
 import support.fuchsia.deviceinformation.ui.display.DisplayFragment;
 import support.fuchsia.deviceinformation.ui.home.HomeFragment;
 
@@ -69,13 +70,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void selectFragment(int id) {
         HomeFragment homeFragment = new HomeFragment();
         DisplayFragment displayFragment = new DisplayFragment();
-
+        CPUFragment cpuFragment = new CPUFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         if (id == R.id.nav_home) {
             transaction.replace(R.id.content_frame, homeFragment);
         } else if (id == R.id.nav_display) {
             transaction.replace(R.id.content_frame, displayFragment);
+        } else if (id == R.id.nav_cpu) {
+            transaction.replace(R.id.content_frame, cpuFragment);
         }
 
         transaction.commit();

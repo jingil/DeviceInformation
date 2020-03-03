@@ -18,6 +18,17 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+        init(root);
+        setDeviceDetails();
         return root;
+    }
+
+    private void setDeviceDetails() {
+
+    }
+
+    private void init(View root) {
+
+
     }
 }

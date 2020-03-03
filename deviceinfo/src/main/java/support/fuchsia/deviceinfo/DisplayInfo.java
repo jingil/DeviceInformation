@@ -1,7 +1,6 @@
 package support.fuchsia.deviceinfo;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -108,7 +107,6 @@ public class DisplayInfo {
         return densityStr;
     }
 
-
     public final float getRefreshRate() {
         WindowManager wm = (WindowManager) activity.getSystemService(WINDOW_SERVICE);
         Display display = null;
@@ -173,7 +171,6 @@ public class DisplayInfo {
             try {
                 return res.getInteger(id);
             } catch (Resources.NotFoundException e) {
-                // ignore
             }
         }
         return 0;
@@ -186,7 +183,6 @@ public class DisplayInfo {
             try {
                 return res.getInteger(id);
             } catch (Resources.NotFoundException e) {
-                // ignore
             }
         }
         return 255;
@@ -242,7 +238,6 @@ public class DisplayInfo {
                 return "ERROR";
 
         }
-
 
     }
 

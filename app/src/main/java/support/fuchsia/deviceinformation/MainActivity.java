@@ -17,6 +17,7 @@ import com.google.android.material.navigation.NavigationView;
 import support.fuchsia.deviceinformation.ui.cpu.CPUFragment;
 import support.fuchsia.deviceinformation.ui.display.DisplayFragment;
 import support.fuchsia.deviceinformation.ui.home.HomeFragment;
+import support.fuchsia.deviceinformation.ui.sensor.SensorFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         HomeFragment homeFragment = new HomeFragment();
         DisplayFragment displayFragment = new DisplayFragment();
         CPUFragment cpuFragment = new CPUFragment();
+        SensorFragment sensorFragment = new SensorFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         if (id == R.id.nav_home) {
@@ -79,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             transaction.replace(R.id.content_frame, displayFragment);
         } else if (id == R.id.nav_cpu) {
             transaction.replace(R.id.content_frame, cpuFragment);
+        }else if (id == R.id.nav_sensors) {
+            transaction.replace(R.id.content_frame, sensorFragment);
         }
 
         transaction.commit();
